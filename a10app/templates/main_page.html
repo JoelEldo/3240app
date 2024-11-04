@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page - All Reports</title>
+<!--    <link rel="stylesheet" href="static/style.css">-->
+    <style>
+        body{
+            --accent_color_1: #90caee;
+            --accent_color_2: #126096;
+            --background-color: #FEFBF1;
+            --white-color: #FFFFFF;
+            width: 100%;
+            margin-bottom: 200px;
+            padding: 0;
+        }
+        .header{
+            background-color: var(--accent_color_1);
+            padding: 0px;
+            margin-bottom: 50px;
+        }
+        .title{
+            color: var(--accent_color_2);
+            display: inline-block;
+            margin-left: 20px;
+        }
+        .report-box {
+            border: 2px solid;
+            border-color: var(--accent_color_2);
+            border-radius: 10px;
+            padding: 20px;
+            width: 40%;
+            margin: auto;
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+            color: var(--accent_color_2);
+        }
+        .report-box:hover{
+            background-color: var(--accent_color_1);
+        }
+        .report-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: var(--accent_color_2);
+        }
+        .login_button{
+            background-color: var(--white-color);
+            color: var(--accent_color_2);
+            border-radius: 20px;
+            border-color: var(--accent_color);
+            padding: 10px 20px 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-right: 20px;
+            text-decoration: none;
+            float: right;
+        }
+        .login_button:hover{
+            background-color: var(--accent_color_2);
+            color: var(--white-color);
+        }
+        .logout_button{
+            background-color: var(--white-color);
+            color: var(--accent_color_2);
+            border-radius: 20px;
+            border-color: var(--accent_color);
+            padding: 10px 20px 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-right: 20px;
+            text-decoration: none;
+            float: right;
+        }
+        .logout_button:hover{
+            background-color: var(--accent_color_2);
+            color: var(--white-color);
+        }
+        .welcome_name{
+            color: var(--accent_color_1);
+            font-weight: bold;
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .view_reports{
+            background-color: var(--accent_color_2);
+            color: white;
+            border-radius: 30px;
+            border-color: var(--accent_color_2);
+            border-style: solid;
+            border-width: 2px;
+            padding: 20px;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .view_reports:hover{
+            background-color: var(--white-color);
+            color: var(--accent_color_2);
+        }
+        .button_position{
+            position: absolute;
+            top: 30%;
+            margin: auto;
+            display: inline-block;
+            z-index: 2;
+        }
+        .create_report_button{
+            background-color: var(--accent_color_2);
+            color: white;
+            border-radius: 30px;
+            border-color: var(--accent_color_2);
+            border-style: solid;
+            border-width: 2px;
+            padding: 20px;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-left: 10px;
+        }
+        .create_report_button:hover{
+            background-color: var(--white-color);
+            color: var(--accent_color_2);
+        }
+        .search{
+            background-color: var(--accent_color);
+            color: white;
+            border-radius: 10px;
+            border-color: var(--accent_color);
+            padding: 20px;
+            font-size: 15px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .search_field{
+            width: 500px;
+            display: inline-block;
+            position: relative;
+            resize: none;
+            border-radius: 20px;
+            font-size: 15px;
+            cursor: text;
+            height: 20px;
+            padding: 10px;
+            margin: auto;
+            margin-bottom: 30px;
+        }
+        .form{
+            display: flex;
+        }
+        .reports_list{
+            color: var(--accent_color_2);
+            margin: auto;
+            font-size: 25px;
+            font-weight: bold;
+            width: 25%;
+            text-align: center;
+            border-bottom: solid;
+            margin-bottom: 30px;
+        }
+        .no_report_text{
+            text-align: center;
+        }
+        footer{
+            height: 50px;
+            position: fixed;
+            bottom: 0;
+            background-color: #f2f2f2;
+            padding: 10px;
+        }
+        .footertext{
+            color: var(--accent_color);
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">HazeReport</h1>
+        {% if not user.is_authenticated %}
+        {% load socialaccount %}
+        {% load auth_extras %}
+
+        <a class="login_button" href="{% provider_login_url 'google' %}?next=/main">Login with Google</a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <a class="logout_button" href="{% url 'logout'%}">Logout?</a>
+        {% endif %}
+
+
+
+    </div>
+    {% if user.is_authenticated %}
+
+        {% if request.user|has_group:"site_admin" %}
+            <div class ="welcome_name"> Welcome admin {{user.username}}!</div>
+        {% else %}
+            <div class ="welcome_name"> Welcome {{user.username}}!</div>
+        {% endif %}
+    {% endif %}
+    <div class="button_position">
+        <a class="create_report_button" href="{% url 'a10app:report'%}">Create New Report</a>
+        {% if user.is_authenticated %}
+            <a class="view_reports" href="{% url 'a10app:user_page'%}">View reports you've made</a>
+        {% endif %}
+
+        {% if request.user|has_group:"site_admin" %}
+        <a class="view_reports" href="{% url 'a10app:list_reports'%}">See All Reports</a>
+        {% endif %}
+    </div>
+    <div class="reports_list">List of Current Reports</div>
+
+    <form id="search_form" class="form" action="{% url 'a10app:search_reports'%}" method="post" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <textarea  onkeydown=handleKeyDown(event) id="search_parameters" name="search_parameters" class="search_field" placeholder={{search_parameter}}></textarea><br>
+    </form>
+
+    <script>
+
+        search_form = document.getElementById("search_form")
+        handleKeyDown = function(events) {
+            if (events.which === 13) {
+                if (!events.repeat) {
+                    search_form.submit()
+                }
+
+                events.preventDefault();
+            }
+        }
+    </script>
+
+    {% if reports %}
+        {% for report in reports %}
+
+                    <div class="report-box">
+                        <a class="report-title" href="{% url 'a10app:view_report' report.id %}"> {{ report.title }}</a>
+                            {% if user|has_group:"site_admin" and report.flagged > 0%}
+                            <div class="report-username"><font color="red">Flagged: {{ report.flagged }} times</font></div>
+                            {% endif %}
+                            <div class="report-username">Location: {{ report.location }}</div>
+                            <div class="report-username">Urgency: {{ report.urgency }}</div>
+                            {% if report.user.username %}
+                            <div class="report-username">User: {{ report.user.username }}</div>
+                            {% endif %}
+                            <div class="report-text">Details: {{ report.text }}</div>
+
+                    </div>
+
+
+
+        {% endfor %}
+    {% else %}
+    <div class="no_report_text">No reports are resolved or no reports match the search criteria.</div>
+    {% endif %}
+
+</body>
+
+<footer>
+
+    <div class="footertext">
+      This system a school project. It is not monitored, and no real information should be submitted. Please search for similar software for your college/area, such as Just Report It at the University of Virginia, if you need to make a real report.
+
+    </div>
+
+</footer>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Reports</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+            margin-bottom: 200px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .report-box {
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .report-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1b4d89;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .report-title:hover {
+            text-decoration: underline;
+        }
+        .report-username {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .report-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .button-position {
+            text-align: right;
+        }
+        .delete-button {
+            background-color: #c62828;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #b71c1c;
+        }
+        .return-button {
+            background-color: #1b4d89;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .return-button:hover {
+            background-color: #0e3b6b;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f2f2f2;
+            padding: 20px;
+            text-align: center;
+        }
+        .main-page-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .main-page-link:hover {
+            color: #0056b3;
+        }
+        footer{
+            height: 50px;
+            position: fixed;
+            bottom: 0;
+            background-color: #f2f2f2;
+            padding: 10px;
+        }
+        .footertext{
+            color: var(--accent_color);
+            font-size: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'a10app:main_page' %}" class="main-page-link">Return to Main Page</a>
+        <h1>Your Reports</h1>
+        <ul>
+            {% for report in report_list %}
+            <li style="list-style-type:none;">
+                <div class="report-box">
+                    <a href="{% url 'a10app:view_report' report.id %}">
+                        <div class="report-title">{{ report.title }}</div>
+                    </a>
+                    <div class="report-username">Status: {{ report.status }}</div>
+                    <div class="report-username">Location: {{ report.location }}</div>
+                    <div class="report-username">Urgency: {{ report.urgency }}</div>
+                    <div class="report-text">{{ report.text }}</div>
+                    <div class="button-position">
+                        <a class="delete-button" href="{% url 'a10app:delete' report.id %}">Delete this?</a>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li>You have not made any reports</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+
+</body>
+<footer>
+
+    <div class="footertext">
+      This system a school project. It is not monitored, and no real information should be submitted. Please search for similar software for your college/area, such as Just Report It at the University of Virginia, if you need to make a real report.
+
+    </div>
+
+</footer>
+</html>
